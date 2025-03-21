@@ -46,7 +46,7 @@ class HumanoidBotElf(LeggedRobot):
             self.dof_pos,                           # [20] Joint states
             self.dof_vel,                           # [20] Joint velocities
             self.actions,                           # [20] astion
-            in_contact,                             # [2] Contact states
+            # in_contact,                             # [2] Contact states
         ), dim=-1)
         # add perceptive inputs if not blind
         if self.cfg.terrain.measure_heights:
@@ -208,19 +208,19 @@ class HumanoidBotElf(LeggedRobot):
             (self.dof_pos[:, 1] + self.dof_pos[:, 7])
             / self.cfg.normalization.obs_scales.dof_pos)
         # Pitch joint symmetry
-        # error += self.sqrdexp(
-        #     (self.dof_pos[:, 2] + self.dof_pos[:, 8])
-        #     / self.cfg.normalization.obs_scales.dof_pos)
+        error += self.sqrdexp(
+            (self.dof_pos[:, 2] + self.dof_pos[:, 8])
+            / self.cfg.normalization.obs_scales.dof_pos)
         return error/4
 
-    # def _reward_ankle_regularization(self):
-    #     # Ankle joint regularization around 0
-    #     error = 0
-    #     error += self.sqrdexp(
-    #         (self.dof_pos[:, 4]) / self.cfg.normalization.obs_scales.dof_pos)
-    #     error += self.sqrdexp(
-    #         (self.dof_pos[:, 9]) / self.cfg.normalization.obs_scales.dof_pos)
-    #     return error
+    def _reward_ankle_regularization(self):
+        # Ankle joint regularization around 0
+        error = 0
+        error += self.sqrdexp(
+            (self.dof_pos[:, 4]) / self.cfg.normalization.obs_scales.dof_pos)
+        error += self.sqrdexp(
+            (self.dof_pos[:, 9]) / self.cfg.normalization.obs_scales.dof_pos)
+        return error
 
     # * Potential-based rewards * #
 
@@ -263,6 +263,13 @@ class HumanoidBotElf(LeggedRobot):
         single_contact = torch.sum(1.*contacts, dim=1)==1 * (torch.norm(self.commands[:, :2], dim=1) > 0.05)
         double_contact = torch.sum(1.*contacts, dim=1)==2 * (torch.norm(self.commands[:, :2], dim=1) <= 0.05)
         return 1.* (single_contact+double_contact)
+    
+    def _reward_dof_acc(self):
+        # Penalize dof accelerations
+        self.dof_acc = (self.dof_vel - self.last_dof_vel) / self.dt
+        self.last_dof_vel = self.dof_vel * 1.0
+        return torch.sum(torch.square(self.dof_acc), dim=1)
+
 
 # ##################### HELPER FUNCTIONS ################################## #
 

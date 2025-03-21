@@ -11,7 +11,7 @@ from gpugym.envs.base.base_config import BaseConfig
 class HumanoidBotElfCfg(LeggedRobotCfg):
     class env(LeggedRobotCfg.env):
         num_envs = 4096
-        num_observations = 78
+        num_observations = 76
         num_actions = 20
         episode_length_s = 5
 
@@ -32,7 +32,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
 
         class ranges:
             # TRAINING COMMAND RANGES #
-            lin_vel_x = [0, 2.5]        # min max [m/s]
+            lin_vel_x = [0, 4.0]        # min max [m/s]
             lin_vel_y = [-0.5, 0.5]   # min max [m/s]
             ang_vel_yaw = [-.5, .5]     # min max [rad/s]
             heading = [0., 0.]
@@ -99,7 +99,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
             'l_hip_z_joint':  [-0.1, 0.1],
             'l_hip_x_joint':  [-0.06, 0.06],
             'l_hip_y_joint':  [-0.2, 0.2],
-            'l_knee_y_joint': [0.5, 0.6],
+            'l_knee_y_joint': [0.1, 0.5],
             'l_ankle_y_joint':[-0.3, 0.3],
             'l_ankle_x_joint':[-0.1, 0.1],
             'l_shld_y_joint': [0.3, 0.7],
@@ -110,7 +110,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
             'r_hip_z_joint':  [-0.1, 0.1],
             'r_hip_x_joint':  [-0.06, 0.06],
             'r_hip_y_joint':  [-0.2, 0.2],
-            'r_knee_y_joint': [0.5, 0.6],
+            'r_knee_y_joint': [0.1, 0.5],
             'r_ankle_y_joint':[-0.3, 0.3],
             'r_ankle_x_joint':[-0.1, 0.1],
             'r_shld_y_joint': [0.3, 0.7],
@@ -228,7 +228,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
         disable_motors = False
 
         # (1: disable, 0: enable...bitwise filter)
-        self_collisions = 0
+        self_collisions = 1
         collapse_fixed_joints = True
         flip_visual_attachments = False
         replace_cylinder_with_capsule = True
@@ -301,7 +301,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
         clip_actions = 10.
 
     class noise(LeggedRobotCfg.noise):
-        add_noise = True
+        add_noise = False
         noise_level = 1.0  # scales other values
 
         class noise_scales(LeggedRobotCfg.noise.noise_scales):
@@ -325,14 +325,14 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
 class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
     class env(HumanoidBotElfCfg.env):
         num_envs = 4096
-        num_observations = 54
+        num_observations = 52
         num_actions = 12
         episode_length_s = 5
     
     class init_state(HumanoidBotElfCfg.init_state):
         reset_mode = 'reset_to_range'
         penetration_check = False
-        pos = [0., 0., 0.9143]        # x,y,z [m]
+        pos = [0., 0., 0.93]        # x,y,z [m]
         rot = [0.0, 0.0, 0.0, 1.0]  # x,y,z,w [quat]
         lin_vel = [0.0, 0.0, 0.0]   # x,y,z [m/s]
         ang_vel = [0.0, 0.0, 0.0]   # x,y,z [rad/s]
@@ -341,7 +341,7 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
         root_pos_range = [
             [0., 0.],
             [0., 0.],
-            [0.96, 0.96],
+            [0.94, 0.94],
             [-torch.pi/10, torch.pi/10],
             [-torch.pi/10, torch.pi/10],
             [-torch.pi/10, torch.pi/10]
@@ -375,16 +375,16 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
 
         dof_pos_range = {
             'l_hip_z_joint':  [-0.1, 0.1],
-            'l_hip_x_joint':  [-0.06, 0.06],
+            'l_hip_x_joint':  [-0.2, 0.2],
             'l_hip_y_joint':  [-0.2, 0.2],
-            'l_knee_y_joint': [0.5, 0.6],
+            'l_knee_y_joint': [0.1, 0.5],
             'l_ankle_y_joint':[-0.3, 0.3],
             'l_ankle_x_joint':[-0.1, 0.1],
             
             'r_hip_z_joint':  [-0.1, 0.1],
-            'r_hip_x_joint':  [-0.06, 0.06],
+            'r_hip_x_joint':  [-0.2, 0.2],
             'r_hip_y_joint':  [-0.2, 0.2],
-            'r_knee_y_joint': [0.5, 0.6],
+            'r_knee_y_joint': [0.2, 0.5],
             'r_ankle_y_joint':[-0.3, 0.3],
             'r_ankle_x_joint':[-0.1, 0.1],
         }
@@ -459,18 +459,18 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
         
         class scales:
             # * "True" rewards * #
-            action_rate = -2.e-4
-            action_rate2 = -2.e-5
+            # action_rate = -2.e-4
+            # action_rate2 = -2.e-5
             tracking_lin_vel = 10.
             tracking_ang_vel = 5.
-            torques = -2e-5
-            dof_pos_limits = -2.0
-            torque_limits = -1e-2
+            # torques = -2e-5
+            # dof_pos_limits = -2.0
+            # torque_limits = -1e-2
             termination = -100
             collision = -1.
-            no_fly = 0.5
-            feet_air_time = 1e-6
-            balance_air_time = -1.0
+            # no_fly = 0.5
+            # feet_air_time = 1e-6
+            # balance_air_time = -1.0
 
             # * PBRS rewards * #
             # Sweep values: [0.1, 0.5, 2.0, 5.0, 10.]
@@ -520,7 +520,6 @@ class HumanoidBotElfCfgPPO(LeggedRobotCfgPPO):
         resume_path = None
 
     class policy(LeggedRobotCfgPPO.policy):
-        #TODO 共享特征提取网络
         actor_hidden_dims = [128, 256, 256, 128]
         critic_hidden_dims = [128, 256, 256, 128]
         # (elu, relu, selu, crelu, lrelu, tanh, sigmoid)
@@ -541,47 +540,3 @@ class HumanoidBotElfFixArmCfgPPO(HumanoidBotElfCfgPPO):
         checkpoint = -1 # -1 = last saved model
         resume_path = None # updated from load_run and chkpt
    
-    do_wandb = False
-    runner_class_name = 'OffPolicyRunner'
-    seed = -1
-
-    class algorithm:
-        # algorithm training hyperparameters
-        q_learning_rate = 1e-4
-        policy_learning_rate = 1e-4
-        autotune_entropy = True
-        ent_coef = 0.2
-        num_learning_epochs = 10
-        num_batchs = 4
-        gamma = 0.99
-        target_update_interval = 1
-        tau = 0.1
-
-    class runner:
-        policy_class_name = 'SAC_QA_Netowrk'
-        algorithm_class_name = 'SAC'
-        num_steps_per_env = 64
-        max_iterations = 1000
-        run_name = 'BotElf_stable_sac'
-        experiment_name = 'BotElf_stable'
-        save_interval = 50
-        plot_input_gradients = False
-        plot_parameter_gradients = False
-        
-        resume = False
-        load_run = -1 # -1 = last run
-        checkpoint = -1 # -1 = last saved model
-        resume_path = None # updated from load_run and chkpt
-
-
-    class policy:
-        actor_hidden_dims = [128, 256, 256, 128]
-        critic_hidden_dims = [128, 256, 256, 128]
-        # (elu, relu, selu, crelu, lrelu, tanh, sigmoid)
-        activation = 'lrelu'
-
-    class dynamic_model():
-        dym_path = None
-        
-    class lyapunov_network():
-        lya_path = None

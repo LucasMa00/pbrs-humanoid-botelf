@@ -29,10 +29,10 @@ class Humanoid(LeggedRobot):
             (in_contact[:, 0].unsqueeze(1), in_contact[:, 1].unsqueeze(1)),
             dim=1)
         self.commands[:, 0:2] = torch.where(
-            torch.norm(self.commands[:, 0:2], dim=-1, keepdim=True) < 0.5,
+            torch.norm(self.commands[:, 0:2], dim=-1, keepdim=True) < 0.3,
             0., self.commands[:, 0:2].double()).float()
         self.commands[:, 2:3] = torch.where(
-            torch.abs(self.commands[:, 2:3]) < 0.5,
+            torch.abs(self.commands[:, 2:3]) < 0.3,
             0., self.commands[:, 2:3].double()).float()
         self.obs_buf = torch.cat((
             base_z,                                 # [1] Base height

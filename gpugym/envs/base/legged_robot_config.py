@@ -39,6 +39,7 @@ class LeggedRobotCfg(BaseConfig):
         env_spacing = 3.  # not used with heightfields/trimeshes 
         send_timeouts = True  # send time out information to the algorithm
         episode_length_s = 20  # episode length in seconds
+        debug_viz = False  # visualize push_pos in the viewer
 
     class terrain:
         mesh_type = 'trimesh' # "heightfield" # none, plane, heightfield or trimesh
@@ -153,7 +154,10 @@ class LeggedRobotCfg(BaseConfig):
         friction_range = [0.5, 1.25]
         randomize_base_mass = False
         added_mass_range = [-1., 1.]
+        
         push_robots = False
+        push_type = "force" # "force", "vel", "mass?"
+        max_push_force = 10. # [N] 
         push_interval_s = 15
         max_push_vel_xy = 1.
 
