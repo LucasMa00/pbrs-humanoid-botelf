@@ -141,10 +141,10 @@ asset_root = "resources/robots"
 
 # List of assets that will be loaded, both URDF and MJCF files are supported
 asset_files = ["mit_humanoid/mit_humanoid_fixed_arms.urdf",
-               "bot_elf/urdf/bot_elf_ess_collision.urdf",
-               "bot_elf/urdf/bot_elf_ess_collision_fixarm.urdf",
+               "bot_elf/urdf/bot_elf.urdf",
+            #    "bot_elf/urdf/bot_elf_ess_collision_fixarm.urdf",
                ]
-asset_names = ['mit_humanoid','bot_elf','bot_elf_ess_collision_fixarm']#'atlas_fixed_upper_body','atlas_v4_arm1','atlas_v4_arm2']
+asset_names = ['mit_humanoid','bot_elf']#'atlas_fixed_upper_body','atlas_v4_arm1','atlas_v4_arm2']
 
 loaded_assets = []
 

@@ -32,7 +32,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
 
         class ranges:
             # TRAINING COMMAND RANGES #
-            lin_vel_x = [0, 4.0]        # min max [m/s]
+            lin_vel_x = [0, 3.0]        # min max [m/s]
             lin_vel_y = [-0.5, 0.5]   # min max [m/s]
             ang_vel_yaw = [-.5, .5]     # min max [rad/s]
             heading = [0., 0.]
@@ -55,7 +55,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
         root_pos_range = [
             [0., 0.],
             [0., 0.],
-            [0.96, 0.96],
+            [0.94, 0.94],
             [-torch.pi/10, torch.pi/10],
             [-torch.pi/10, torch.pi/10],
             [-torch.pi/10, torch.pi/10]
@@ -228,7 +228,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
         disable_motors = False
 
         # (1: disable, 0: enable...bitwise filter)
-        self_collisions = 1
+        self_collisions = 0
         collapse_fixed_joints = True
         flip_visual_attachments = False
         replace_cylinder_with_capsule = True
@@ -240,7 +240,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
     class rewards(LeggedRobotCfg.rewards):
         pass
         #! "Incorrect" specification of height
-        base_height_target = 0.92
+        base_height_target = 0.84
         soft_dof_pos_limit = 0.9
         soft_dof_vel_limit = 0.9
         soft_torque_limit = 0.8
@@ -327,7 +327,7 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
         num_envs = 4096
         num_observations = 52
         num_actions = 12
-        episode_length_s = 5
+        episode_length_s = 10
     
     class init_state(HumanoidBotElfCfg.init_state):
         reset_mode = 'reset_to_range'
@@ -341,7 +341,7 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
         root_pos_range = [
             [0., 0.],
             [0., 0.],
-            [0.94, 0.94],
+            [0.93, 0.95],
             [-torch.pi/10, torch.pi/10],
             [-torch.pi/10, torch.pi/10],
             [-torch.pi/10, torch.pi/10]
@@ -377,14 +377,14 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
             'l_hip_z_joint':  [-0.1, 0.1],
             'l_hip_x_joint':  [-0.2, 0.2],
             'l_hip_y_joint':  [-0.2, 0.2],
-            'l_knee_y_joint': [0.1, 0.5],
+            'l_knee_y_joint': [0.3, 0.6],
             'l_ankle_y_joint':[-0.3, 0.3],
             'l_ankle_x_joint':[-0.1, 0.1],
             
             'r_hip_z_joint':  [-0.1, 0.1],
             'r_hip_x_joint':  [-0.2, 0.2],
             'r_hip_y_joint':  [-0.2, 0.2],
-            'r_knee_y_joint': [0.2, 0.5],
+            'r_knee_y_joint': [0.3, 0.6],
             'r_ankle_y_joint':[-0.3, 0.3],
             'r_ankle_x_joint':[-0.1, 0.1],
         }
@@ -405,37 +405,37 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
             'r_ankle_x_joint': [-0.1, 0.1],
         }
 
-    class control(HumanoidBotElfCfg.control):
+    class control(LeggedRobotCfg.control):
         # stiffness and damping for joints
         stiffness = {
-            'l_hip_z_joint': 10.,
-            'l_hip_x_joint': 10.,
+            'l_hip_z_joint': 25.,
+            'l_hip_x_joint': 25.,
             'l_hip_y_joint': 30.,
-            'l_knee_y_joint': 30.,
-            'l_ankle_y_joint': 5.,
-            'l_ankle_x_joint': 5.,            
+            'l_knee_y_joint': 40.,
+            'l_ankle_y_joint': 3.,
+            'l_ankle_x_joint': 3.,            
             
-            'r_hip_z_joint': 10.,
-            'r_hip_x_joint': 10.,
+            'r_hip_z_joint': 25.,
+            'r_hip_x_joint': 25.,
             'r_hip_y_joint': 30.,
-            'r_knee_y_joint': 30.,
-            'r_ankle_y_joint': 5.,
-            'r_ankle_x_joint': 5.,
+            'r_knee_y_joint': 40.,
+            'r_ankle_y_joint': 3.,
+            'r_ankle_x_joint': 3.,
         }
         damping = {
-            'l_hip_z_joint': 1.5,
-            'l_hip_x_joint': 1.5,
-            'l_hip_y_joint': 2.5,
-            'l_knee_y_joint': 2.5,
-            'l_ankle_y_joint': 1.,
-            'l_ankle_x_joint': 1.,
+            'l_hip_z_joint': 2.5,
+            'l_hip_x_joint': 2.5,
+            'l_hip_y_joint': 3.,
+            'l_knee_y_joint': 4.,
+            'l_ankle_y_joint': 0.3,
+            'l_ankle_x_joint': 0.3,
             
-            'r_hip_z_joint': 1.5,
-            'r_hip_x_joint': 1.5,
-            'r_hip_y_joint': 2.5,
-            'r_knee_y_joint': 2.5,
-            'r_ankle_y_joint': 1.,
-            'r_ankle_x_joint': 1.,
+            'r_hip_z_joint': 2.5,
+            'r_hip_x_joint': 2.5,
+            'r_hip_y_joint': 3.,
+            'r_knee_y_joint': 4.,
+            'r_ankle_y_joint': 0.3,
+            'r_ankle_x_joint': 0.3,
         }
 
         action_scale = 1.0
@@ -454,7 +454,7 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
         soft_dof_pos_limit = 0.9 # percentage of urdf limits, values above this limit are penalized
         soft_dof_vel_limit = 0.9
         soft_torque_limit = 0.9  # ! may want to turn this off
-        base_height_target = 0.9
+        base_height_target = 0.82
         max_contact_force = 300. # forces above this value are penalized
         
         class scales:
@@ -466,7 +466,7 @@ class HumanoidBotElfFixArmCfg(HumanoidBotElfCfg):
             # torques = -2e-5
             # dof_pos_limits = -2.0
             # torque_limits = -1e-2
-            termination = -100
+            # termination = -20.
             collision = -1.
             # no_fly = 0.5
             # feet_air_time = 1e-6
