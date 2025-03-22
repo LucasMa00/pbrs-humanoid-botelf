@@ -763,7 +763,7 @@
     </collision>
   </link>
   <joint name="l_shld_y_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0.213 0.1521"
       rpy="0 0 0" />
@@ -819,7 +819,7 @@
     </collision>
   </link>
   <joint name="l_shld_x_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />
@@ -875,7 +875,7 @@
     </collision>
   </link>
   <joint name="l_shld_z_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />
@@ -920,7 +920,7 @@
           rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -928,10 +928,10 @@
         <mesh
           filename="../meshes/l_elb_y_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="l_elb_y_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 -0.24505"
       rpy="0 0 0" />
@@ -987,7 +987,7 @@
     </collision>
   </link>
   <joint name="r_shld_y_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 -0.213 0.1521"
       rpy="0 0 0" />
@@ -1043,7 +1043,7 @@
     </collision>
   </link>
   <joint name="r_shld_x_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />
@@ -1099,7 +1099,7 @@
     </collision>
   </link>
   <joint name="r_shld_z_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />
@@ -1144,7 +1144,7 @@
           rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -1152,10 +1152,10 @@
         <mesh
           filename="../meshes/r_elb_y_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="r_elb_y_joint"
-    type="revolute">
+    type="fixed">
     <origin
       xyz="0 0 -0.24505"
       rpy="0 0 0" />

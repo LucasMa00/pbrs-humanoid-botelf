@@ -21,7 +21,7 @@ class HumanoidBotElf(LeggedRobot):
         self.eps = 0.2
         self.phase_freq = 1.
 
-    def compute_observations(self):        
+    def compute_observations(self):
         base_z = self.root_states[:, 2].unsqueeze(1)*self.obs_scales.base_z
         in_contact = torch.gt(
             self.contact_forces[:, self.end_eff_ids, 2], 0).int()
@@ -29,10 +29,10 @@ class HumanoidBotElf(LeggedRobot):
             (in_contact[:, 0].unsqueeze(1), in_contact[:, 1].unsqueeze(1)),
             dim=1)
         self.commands[:, 0:2] = torch.where(
-            torch.norm(self.commands[:, 0:2], dim=-1, keepdim=True) < 0.5,
+            torch.norm(self.commands[:, 0:2], dim=-1, keepdim=True) < 0.3,
             0., self.commands[:, 0:2].double()).float()
         self.commands[:, 2:3] = torch.where(
-            torch.abs(self.commands[:, 2:3]) < 0.5,
+            torch.abs(self.commands[:, 2:3]) < 0.3,
             0., self.commands[:, 2:3].double()).float()
         self.obs_buf = torch.cat((
             base_z,                                 # [1] Base height
@@ -43,20 +43,16 @@ class HumanoidBotElf(LeggedRobot):
             self.smooth_sqr_wave(self.phase),       # [1] Contact schedule
             torch.sin(2*torch.pi*self.phase),       # [1] Phase variable
             torch.cos(2*torch.pi*self.phase),       # [1] Phase variable
-            self.dof_pos,                           # [20] Joint states
-            self.dof_vel,                           # [20] Joint velocities
-            self.actions,                           # [20] astion
+            self.dof_pos,                           # [12] Joint states
+            self.dof_vel,                           # [12] Joint velocities
+            self.actions,                           # [12] astion
             # in_contact,                             # [2] Contact states
         ), dim=-1)
-        # add perceptive inputs if not blind
-        if self.cfg.terrain.measure_heights:
-            heights = torch.clip(self.root_states[:, 2].unsqueeze(1) - 0.5 - self.measured_heights, -1, 1.)*self.obs_scales.height_measurements
-            self.obs_buf = torch.cat((self.obs_buf, heights), dim=-1)
-        
         if self.add_noise:
             self.obs_buf += (2*torch.rand_like(self.obs_buf) - 1) \
                 * self.noise_scale_vec
 
+    #TODO: fix
     def _get_noise_scale_vec(self, cfg):
         noise_vec = torch.zeros_like(self.obs_buf[0])
         self.add_noise = self.cfg.noise.add_noise
@@ -66,13 +62,12 @@ class HumanoidBotElf(LeggedRobot):
         noise_vec[1:4] = noise_scales.lin_vel
         noise_vec[4:7] = noise_scales.ang_vel
         noise_vec[7:10] = noise_scales.gravity
-        noise_vec[10:16] = 0.   # commands&Phase&ContactSchedule
-        noise_vec[16:36] = noise_scales.dof_pos
-        noise_vec[36:56] = noise_scales.dof_vel
-        noise_vec[56:76] = 0.   # actions
-        noise_vec[76:78] = noise_scales.in_contact  # previous actions
+        noise_vec[10:16] = 0.   # commands
+        noise_vec[16:26] = noise_scales.dof_pos
+        noise_vec[26:36] = noise_scales.dof_vel
+        noise_vec[36:38] = noise_scales.in_contact  # previous actions
         if self.cfg.terrain.measure_heights:
-            noise_vec[78:] = noise_scales.height_measurements \
+            noise_vec[48:235] = noise_scales.height_measurements \
                 * noise_level \
                 * self.obs_scales.height_measurements
         noise_vec = noise_vec * noise_level
@@ -95,17 +90,10 @@ class HumanoidBotElf(LeggedRobot):
             pass  # when the joystick is used, the self.commands variables are overridden
         else:
             self._resample_commands(env_ids)
-            # if (self.cfg.domain_rand.push_robots and
-            #     (self.common_step_counter
-            #     % self.cfg.domain_rand.push_interval == 0)):
-            #     self._push_robots()
-        if self.cfg.terrain.measure_heights:
-            self.measured_heights = self._get_heights()
-        if self.cfg.domain_rand.push_robots: 
-            if self.cfg.domain_rand.push_type == "vel" and (self.common_step_counter % self.cfg.domain_rand.push_interval == 0):
+            if (self.cfg.domain_rand.push_robots and
+                (self.common_step_counter
+                % self.cfg.domain_rand.push_interval == 0)):
                 self._push_robots()
-            if self.cfg.domain_rand.push_type == "force":
-                self._push_robots_force()
 
     def _push_robots(self):
         # Randomly pushes the robots.
@@ -177,25 +165,8 @@ class HumanoidBotElf(LeggedRobot):
         dof_vel_scaled = self.dof_vel/self.cfg.normalization.obs_scales.dof_vel
         return torch.sum(self.sqrdexp(dof_vel_scaled), dim=-1)
 
+    #TODO 引入膝关节和髋关节，踝关节的关系
     def _reward_joint_regularization(self):
-        # Reward joint poses and symmetry
-        error = 0.
-        # Yaw joints regularization around 0
-        error += self.sqrdexp(
-            (self.dof_pos[:, 0]) / self.cfg.normalization.obs_scales.dof_pos)
-        error += self.sqrdexp(
-            (self.dof_pos[:, 10]) / self.cfg.normalization.obs_scales.dof_pos)
-        # Ab/ad joint symmetry
-        error += self.sqrdexp(
-            (self.dof_pos[:, 1] + self.dof_pos[:, 11])
-            / self.cfg.normalization.obs_scales.dof_pos)
-        # Pitch joint symmetry
-        error += self.sqrdexp(
-            (self.dof_pos[:, 2] + self.dof_pos[:, 12])
-            / self.cfg.normalization.obs_scales.dof_pos)
-        return error/4
-    
-    def _reward_joint_regularization_fixarm(self):
         # Reward joint poses and symmetry
         error = 0.
         # Yaw joints regularization around 0
@@ -213,24 +184,21 @@ class HumanoidBotElf(LeggedRobot):
             / self.cfg.normalization.obs_scales.dof_pos)
         return error/4
 
-    def _reward_ankle_regularization(self):
-        # Ankle joint regularization around 0
-        error = 0
-        error += self.sqrdexp(
-            (self.dof_pos[:, 4]) / self.cfg.normalization.obs_scales.dof_pos)
-        error += self.sqrdexp(
-            (self.dof_pos[:, 9]) / self.cfg.normalization.obs_scales.dof_pos)
-        return error
+    # def _reward_ankle_regularization(self):
+    #     # Ankle joint regularization around 0
+    #     error = 0
+    #     error += self.sqrdexp(
+    #         (self.dof_pos[:, 4]) / self.cfg.normalization.obs_scales.dof_pos)
+    #     error += self.sqrdexp(
+    #         (self.dof_pos[:, 9]) / self.cfg.normalization.obs_scales.dof_pos)
+    #     return error
 
     # * Potential-based rewards * #
 
     def pre_physics_step(self):
         self.rwd_oriPrev = self._reward_orientation()
         self.rwd_baseHeightPrev = self._reward_base_height()
-        if "jointReg_pb" in self.reward_scales.keys():
-            self.rwd_jointRegPrev = self._reward_joint_regularization()
-        elif "jointReg_pb_fixarm" in self.reward_scales.keys():
-            self.rwd_jointRegPrev_fixarm = self._reward_joint_regularization_fixarm()
+        self.rwd_jointRegPrev = self._reward_joint_regularization()
 
     def _reward_ori_pb(self):
         delta_phi = ~self.reset_buf \
@@ -242,34 +210,16 @@ class HumanoidBotElf(LeggedRobot):
             * (self._reward_joint_regularization() - self.rwd_jointRegPrev)
         return delta_phi / self.dt_step
 
-    def _reward_jointReg_pb_fixarm(self):
-        delta_phi = ~self.reset_buf \
-            * (self._reward_joint_regularization_fixarm() - self.rwd_jointRegPrev_fixarm)
-        return delta_phi / self.dt_step
-
     def _reward_baseHeight_pb(self):
         delta_phi = ~self.reset_buf \
             * (self._reward_base_height() - self.rwd_baseHeightPrev)
         return delta_phi / self.dt_step
-    
-# ##################### New Reward ################################## #
-    def _reward_balance_air_time(self):
-        #balance left and right foot air time
-        rew_balance = torch.abs(self.last_air_time[:, 0] - self.last_air_time[:, 1])
-        return rew_balance
 
+# ##################### ADD Rewards ###################################### #
     def _reward_no_fly(self):
         contacts = self.contact_forces[:, self.feet_indices, 2] > 0.1
-        single_contact = torch.sum(1.*contacts, dim=1)==1 * (torch.norm(self.commands[:, :2], dim=1) > 0.05)
-        double_contact = torch.sum(1.*contacts, dim=1)==2 * (torch.norm(self.commands[:, :2], dim=1) <= 0.05)
-        return 1.* (single_contact+double_contact)
-    
-    def _reward_dof_acc(self):
-        # Penalize dof accelerations
-        self.dof_acc = (self.dof_vel - self.last_dof_vel) / self.dt
-        self.last_dof_vel = self.dof_vel * 1.0
-        return torch.sum(torch.square(self.dof_acc), dim=1)
-
+        single_contact = torch.sum(1.*contacts, dim=1)==1
+        return 1.*single_contact
 
 # ##################### HELPER FUNCTIONS ################################## #
 

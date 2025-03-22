@@ -2,7 +2,7 @@
 Author: shuaikangma shuaikangma@qq.com
 Date: 2025-03-20 23:46:54
 LastEditors: shuaikangma shuaikangma@qq.com
-LastEditTime: 2025-03-21 00:08:51
+LastEditTime: 2025-03-22 11:19:19
 Description: 
 
 Copyright (c) 2025 by ${git_name_email}, All Rights Reserved. 
@@ -43,11 +43,9 @@ from gpugym.utils.task_registry import task_registry
 from .PBRS.humanoid import Humanoid
 from .PBRS.humanoid_config import HumanoidCfg, HumanoidCfgPPO
 
-from .PBRS.humanoid_bot_elf import HumanoidBotElf
-from .PBRS.humanoid_bot_elf_config import HumanoidBotElfCfg, HumanoidBotElfCfgPPO, \
-        HumanoidBotElfFixArmCfg, HumanoidBotElfFixArmCfgPPO
+from .PBRS.humanoid_botelf import HumanoidBotElf
+from .PBRS.humanoid_botelf_config import HumanoidBotElfCfg, HumanoidBotElfCfgPPO
 
 task_registry.register("pbrs:humanoid", Humanoid, HumanoidCfg(), HumanoidCfgPPO())
 
-task_registry.register("humanoid_bot_elf", HumanoidBotElf, HumanoidBotElfCfg(), HumanoidBotElfCfgPPO())
-task_registry.register("humanoid_bot_elf_fixarm", HumanoidBotElf, HumanoidBotElfFixArmCfg(), HumanoidBotElfFixArmCfgPPO())
+task_registry.register("humanoid_botelf", HumanoidBotElf, HumanoidBotElfCfg(), HumanoidBotElfCfgPPO())

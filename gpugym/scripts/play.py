@@ -116,8 +116,8 @@ def play(args):
                 + env.torques[robot_index, :].detach().cpu().numpy().tolist()
             )
         elif i==stop_state_log:
-            np.savetxt('../analysis/data/play_log.csv', play_log, delimiter=',')
-            # logger.plot_states()
+            # np.savetxt('../analysis/data/play_log.csv', play_log, delimiter=',')
+            logger.plot_states()
         if  0 < i < stop_rew_log:
             if infos["episode"]:
                 num_episodes = torch.sum(env.reset_buf).item()
