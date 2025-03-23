@@ -31,8 +31,8 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
         class ranges:
             # TRAINING COMMAND RANGES #
             lin_vel_x = [-1.0, 4.0]        # min max [m/s]
-            lin_vel_y = [-0.75, 0.75]   # min max [m/s]
-            ang_vel_yaw = [-2., 2.]     # min max [rad/s]
+            lin_vel_y = [-0.5, 0.5]   # min max [m/s]
+            ang_vel_yaw = [-1., 1.]     # min max [rad/s]
             heading = [0., 0.]
 
             # PLAY COMMAND RANGES #
@@ -213,7 +213,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
             termination = -100
             
             feet_air_time = 10.0
-            no_fly = 0.25
+            no_fly = 1.0
             # collision = -1.0
             # * Shaping rewards * #
             # Sweep values: [0.5, 2.5, 10, 25., 50.]

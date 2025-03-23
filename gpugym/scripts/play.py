@@ -88,7 +88,15 @@ def play(args):
     env.max_episode_length = 1000./env.dt
     for i in range(10*int(env.max_episode_length)):
         actions = policy(obs.detach())
+        
+        if FIX_COMMAND:
+            env.commands[:, :] = 0.
+            env.commands[:, 0] = 5.
+            env.commands[:, 1] = 0.0
+            env.commands[:, 2] = 0.0
+            
         obs, _, rews, dones, infos = env.step(actions.detach())
+        print("lin vel 0: ", env.base_lin_vel[0])
         if RECORD_FRAMES:
             if i % 2:
                 filename = os.path.join(LEGGED_GYM_ROOT_DIR, 'logs', train_cfg.runner.experiment_name, 'exported', 'frames', f"{img_idx}.png")
@@ -131,5 +139,6 @@ if __name__ == '__main__':
     EXPORT_CRITIC = True
     RECORD_FRAMES = False
     MOVE_CAMERA = False
+    FIX_COMMAND = True
     args = get_args()
     play(args)
