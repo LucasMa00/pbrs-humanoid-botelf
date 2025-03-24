@@ -46,7 +46,7 @@ class HumanoidBotElf(LeggedRobot):
             self.dof_pos,                           # [12] Joint states
             self.dof_vel,                           # [12] Joint velocities
             self.actions,                           # [12] astion
-            # in_contact,                             # [2] Contact states
+            in_contact,                             # [2] Contact states
         ), dim=-1)
         if self.add_noise:
             self.obs_buf += (2*torch.rand_like(self.obs_buf) - 1) \

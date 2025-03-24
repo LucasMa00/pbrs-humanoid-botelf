@@ -11,7 +11,7 @@ from gpugym.envs.base.legged_robot_config \
 class HumanoidBotElfCfg(LeggedRobotCfg):
     class env(LeggedRobotCfg.env):
         num_envs = 4096
-        num_observations = 52
+        num_observations = 54
         num_actions = 12
         episode_length_s = 8
 
@@ -30,7 +30,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
 
         class ranges:
             # TRAINING COMMAND RANGES #
-            lin_vel_x = [-1.0, 4.0]        # min max [m/s]
+            lin_vel_x = [-1.0, 3.0]        # min max [m/s]
             lin_vel_y = [-0.5, 0.5]   # min max [m/s]
             ang_vel_yaw = [-1., 1.]     # min max [rad/s]
             heading = [0., 0.]
@@ -192,7 +192,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
     class rewards(LeggedRobotCfg.rewards):
         # ! "Incorrect" specification of height
         # base_height_target = 0.7
-        base_height_target = 0.85
+        base_height_target = 0.82
         soft_dof_pos_limit = 0.9
         soft_dof_vel_limit = 0.9
         soft_torque_limit = 0.8
