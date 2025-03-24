@@ -46,7 +46,7 @@ class HumanoidBotElf(LeggedRobot):
             self.dof_pos,                           # [12] Joint states
             self.dof_vel,                           # [12] Joint velocities
             self.actions,                           # [12] astion
-            in_contact,                             # [2] Contact states
+            # in_contact,                             # [2] Contact states
         ), dim=-1)
         if self.add_noise:
             self.obs_buf += (2*torch.rand_like(self.obs_buf) - 1) \
@@ -219,7 +219,9 @@ class HumanoidBotElf(LeggedRobot):
     def _reward_no_fly(self):
         contacts = self.contact_forces[:, self.feet_indices, 2] > 0.1
         single_contact = torch.sum(1.*contacts, dim=1)==1
-        return 1.*single_contact
+        double_contact = torch.sum(1.*contacts, dim=1)==2
+        correct_contact = torch.where(torch.linalg.norm(self.commands[:, :2], dim=-1) > 0.1, single_contact, double_contact)
+        return correct_contact.float()
 
 # ##################### HELPER FUNCTIONS ################################## #
 

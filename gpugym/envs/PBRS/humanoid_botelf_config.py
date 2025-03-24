@@ -11,7 +11,7 @@ from gpugym.envs.base.legged_robot_config \
 class HumanoidBotElfCfg(LeggedRobotCfg):
     class env(LeggedRobotCfg.env):
         num_envs = 4096
-        num_observations = 54
+        num_observations = 52
         num_actions = 12
         episode_length_s = 8
 
