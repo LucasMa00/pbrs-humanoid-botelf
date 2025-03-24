@@ -203,16 +203,16 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
 
         class scales(LeggedRobotCfg.rewards.scales):
             # * "True" rewards * #
-            action_rate = -1.e-5 #-1.e-3
-            action_rate2 = -1.e-6 #-1.e-4
+            action_rate = -1.e-3 #-1.e-3
+            action_rate2 = -1.e-4 #-1.e-4
             tracking_lin_vel = 10.
             tracking_ang_vel = 5.
-            torques = -1e-6 #-1e-4
+            torques = -1e-4 #-1e-4
             dof_pos_limits = -10
-            torque_limits = -1e-4 #-1e-2
+            torque_limits = -1e-2 #-1e-2
             termination = -100
             
-            feet_air_time = 10.0
+            feet_air_time = 100.0
             no_fly = 1.0
             # collision = -1.0
             # * Shaping rewards * #
@@ -239,7 +239,7 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
 
             # Sweep values: [0.1, 0.5, 2.0, 5.0, 10.]
             # Default: 1.0
-            # jointReg_pb = 1.0
+            jointReg_pb = 1.0
 
     class normalization(LeggedRobotCfg.normalization):
         class obs_scales(LeggedRobotCfg.normalization.obs_scales):

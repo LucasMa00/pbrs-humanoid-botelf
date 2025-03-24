@@ -179,9 +179,9 @@ class HumanoidBotElf(LeggedRobot):
             (self.dof_pos[:, 1] + self.dof_pos[:, 7])
             / self.cfg.normalization.obs_scales.dof_pos)
         # Pitch joint symmetry
-        error += self.sqrdexp(
-            (self.dof_pos[:, 2] + self.dof_pos[:, 8])
-            / self.cfg.normalization.obs_scales.dof_pos)
+        # error += self.sqrdexp(
+        #     (self.dof_pos[:, 2] + self.dof_pos[:, 8])
+        #     / self.cfg.normalization.obs_scales.dof_pos)
         return error/4
 
     # def _reward_ankle_regularization(self):
@@ -220,7 +220,7 @@ class HumanoidBotElf(LeggedRobot):
         contacts = self.contact_forces[:, self.feet_indices, 2] > 0.1
         single_contact = torch.sum(1.*contacts, dim=1)==1
         double_contact = torch.sum(1.*contacts, dim=1)==2
-        correct_contact = torch.where(torch.linalg.norm(self.commands[:, :2], dim=-1) > 0.1, single_contact, double_contact)
+        correct_contact = torch.where(torch.norm(self.commands[:, :2], dim=1) > 0.1, single_contact, double_contact)
         return correct_contact.float()
 
 # ##################### HELPER FUNCTIONS ################################## #

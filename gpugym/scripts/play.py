@@ -91,7 +91,7 @@ def play(args):
         
         if FIX_COMMAND:
             env.commands[:, :] = 0.
-            env.commands[:, 0] = 4.
+            env.commands[:, 0] = 2.
             env.commands[:, 1] = 0.0
             env.commands[:, 2] = 0.0
             
