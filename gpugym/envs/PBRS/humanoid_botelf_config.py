@@ -270,6 +270,184 @@ class HumanoidBotElfCfg(LeggedRobotCfg):
         class physx:
             max_depenetration_velocity = 10.0
 
+class HumanoidBotElfFreeArmCfg(HumanoidBotElfCfg):
+    class env(HumanoidBotElfCfg.env):
+        num_envs = 4096
+        num_observations = 76
+        num_actions = 20
+        episode_length_s = 5
+    
+    class init_state(HumanoidBotElfCfg.init_state):
+        default_joint_angles = {
+            'l_hip_z_joint': 0.,
+            'l_hip_x_joint': 0.,
+            'l_hip_y_joint': -0.2,
+            'l_knee_y_joint': 0.25,  # 0.6
+            'l_ankle_y_joint': -0.,
+            'l_ankle_x_joint': 0.,
+            
+            'l_shld_y_joint': 0.5,
+            'l_shld_x_joint': 0.1,
+            'l_shld_z_joint': 0.,
+            'l_elb_y_joint': -1.2,
+            
+            'r_hip_z_joint': 0.,
+            'r_hip_x_joint': 0.,
+            'r_hip_y_joint': -0.2,
+            'r_knee_y_joint': 0.25,  # 0.6
+            'r_ankle_y_joint': -0.,
+            'r_ankle_x_joint': 0.,
+            
+            'r_shld_y_joint': 0.5,
+            'r_shld_x_joint': -0.1,
+            'r_shld_z_joint': 0.,
+            'r_elb_y_joint': -1.2,
+        }
+
+        dof_pos_range = {
+            'l_hip_z_joint':  [-0.1, 0.1],
+            'l_hip_x_joint':  [-0.06, 0.06],
+            'l_hip_y_joint':  [-0.3, -0.1],
+            'l_knee_y_joint': [0.4, 0.6],
+            'l_ankle_y_joint':[-0.4, -0.2],
+            'l_ankle_x_joint':[-0.1, 0.1],
+            
+            'l_shld_y_joint': [0.3, 0.7],
+            'l_shld_x_joint': [0.1, 0.3],
+            'l_shld_z_joint': [-0.1, 0.1],
+            'l_elb_y_joint':  [-1.2, -0.8],
+            
+            'r_hip_z_joint':  [-0.1, 0.1],
+            'r_hip_x_joint':  [-0.06, 0.06],
+            'r_hip_y_joint':  [-0.3, -0.1],
+            'r_knee_y_joint': [0.4, 0.6],
+            'r_ankle_y_joint':[-0.4, -0.2],
+            'r_ankle_x_joint':[-0.1, 0.1],
+            
+            'r_shld_y_joint': [0.3, 0.7],
+            'r_shld_x_joint': [-0.3, -0.1],
+            'r_shld_z_joint': [-0.1, 0.1],
+            'r_elb_y_joint':  [-1.2, -0.8],
+        }
+
+        dof_vel_range = {
+            'l_hip_z_joint': [-0.1, 0.1],
+            'l_hip_x_joint': [-0.1, 0.1],
+            'l_hip_y_joint': [-0.1, 0.1],
+            'l_knee_y_joint': [-0.1, 0.1],
+            'l_ankle_y_joint': [-0.1, 0.1],
+            'l_ankle_x_joint': [-0.1, 0.1],
+            
+            'l_shld_y_joint': [-0.1, 0.1],
+            'l_shld_x_joint': [-0.1, 0.1],
+            'l_shld_z_joint': [-0.1, 0.1],
+            'l_elb_y_joint':  [-0.1, 0.1],
+            
+            'r_hip_z_joint': [-0.1, 0.1],
+            'r_hip_x_joint': [-0.1, 0.1],
+            'r_hip_y_joint': [-0.1, 0.1],
+            'r_knee_y_joint': [-0.1, 0.1],
+            'r_ankle_y_joint': [-0.1, 0.1],
+            'r_ankle_x_joint': [-0.1, 0.1],
+            
+            'r_shld_y_joint': [-0.1, 0.1],
+            'r_shld_x_joint': [-0.1, 0.1],
+            'r_shld_z_joint': [-0.1, 0.1],
+            'r_elb_y_joint':  [-0.1, 0.1],
+        }
+
+    class control(HumanoidBotElfCfg.control):
+        # stiffness and damping for joints
+        stiffness = {
+            'l_hip_z_joint': 25.,
+            'l_hip_x_joint': 25.,
+            'l_hip_y_joint': 30.,
+            'l_knee_y_joint': 40.,
+            'l_ankle_y_joint': 3.,
+            'l_ankle_x_joint': 3., 
+            
+            'l_shld_y_joint': 10.,
+            'l_shld_x_joint': 10.,
+            'l_shld_z_joint': 10.,
+            'l_elb_y_joint': 10.,           
+            
+            'r_hip_z_joint': 25.,
+            'r_hip_x_joint': 25.,
+            'r_hip_y_joint': 30.,
+            'r_knee_y_joint': 40.,
+            'r_ankle_y_joint': 3.,
+            'r_ankle_x_joint': 3.,
+            
+            'r_shld_y_joint': 10.,
+            'r_shld_x_joint': 10.,
+            'r_shld_z_joint': 10.,
+            'r_elb_y_joint': 10.,
+        }
+        damping = {
+            'l_hip_z_joint': 2.5,
+            'l_hip_x_joint': 2.5,
+            'l_hip_y_joint': 3.,
+            'l_knee_y_joint': 4.,
+            'l_ankle_y_joint': 0.3,
+            'l_ankle_x_joint': 0.3,
+            
+            'l_shld_y_joint': 1.5,
+            'l_shld_x_joint': 1.5,
+            'l_shld_z_joint': 1.5,
+            'l_elb_y_joint': 1.5,
+            
+            'r_hip_z_joint': 2.5,
+            'r_hip_x_joint': 2.5,
+            'r_hip_y_joint': 3.,
+            'r_knee_y_joint': 4.,
+            'r_ankle_y_joint': 0.3,
+            'r_ankle_x_joint': 0.3,
+            
+            'r_shld_y_joint': 1.5,
+            'r_shld_x_joint': 1.5,
+            'r_shld_z_joint': 1.5,
+            'r_elb_y_joint': 1.5,
+        }
+
+    class asset(HumanoidBotElfCfg.asset):
+        file = '{LEGGED_GYM_ROOT_DIR}/'\
+            'resources/robots/bot_elf/urdf/bot_elf.urdf'
+        terminate_after_contacts_on = [
+            'base_link', 'hip_y_link', 'knee_y_link',
+        ]
+        penalize_contacts_on = ['hip_y_link', 'knee_y_link', 'r_elb_y_link', 'l_elb_y_link']
+        
+    class rewards(LeggedRobotCfg.rewards):
+        # ! "Incorrect" specification of height
+        # base_height_target = 0.7
+        base_height_target = 0.82
+        soft_dof_pos_limit = 0.9
+        soft_dof_vel_limit = 0.9
+        soft_torque_limit = 0.8
+
+        # negative total rewards clipped at zero (avoids early termination)
+        only_positive_rewards = False
+        tracking_sigma = 0.5
+
+        class scales(LeggedRobotCfg.rewards.scales):
+            action_rate = -1.e-3 #-1.e-3
+            action_rate2 = -1.e-4 #-1.e-4
+            tracking_lin_vel = 10.
+            tracking_ang_vel = 5.
+            torques = -1e-4 #-1e-4
+            dof_pos_limits = -10
+            torque_limits = -1e-2 #-1e-2
+            termination = -100
+            
+            collision = -1.0
+            
+            feet_air_time = 100.0
+            no_fly = 1.0
+
+            ori_pb = 1.0
+            baseHeight_pb = 1.0
+            leg_jointReg_pb = 1.0
+            arm_jointReg_pb = 1.0
 
 class HumanoidBotElfCfgPPO(LeggedRobotCfgPPO):
     do_wandb = True
@@ -304,3 +482,8 @@ class HumanoidBotElfCfgPPO(LeggedRobotCfgPPO):
         critic_hidden_dims = [256, 256, 256]
         # (elu, relu, selu, crelu, lrelu, tanh, sigmoid)
         activation = 'elu'
+
+class HumanoidBotElfFreeArmCfgPPO(HumanoidBotElfCfgPPO):
+    class runner(HumanoidBotElfCfgPPO.runner):
+        run_name = 'BotelfFreeArm'
+        experiment_name = 'Botelf_FreeArm_Locomotion'

@@ -2,7 +2,7 @@
 Author: shuaikangma shuaikangma@qq.com
 Date: 2025-03-20 23:46:54
 LastEditors: shuaikangma shuaikangma@qq.com
-LastEditTime: 2025-03-22 11:19:19
+LastEditTime: 2025-03-25 01:47:02
 Description: 
 
 Copyright (c) 2025 by ${git_name_email}, All Rights Reserved. 
@@ -44,8 +44,10 @@ from .PBRS.humanoid import Humanoid
 from .PBRS.humanoid_config import HumanoidCfg, HumanoidCfgPPO
 
 from .PBRS.humanoid_botelf import HumanoidBotElf
-from .PBRS.humanoid_botelf_config import HumanoidBotElfCfg, HumanoidBotElfCfgPPO
+from .PBRS.humanoid_botelf_config import HumanoidBotElfCfg, HumanoidBotElfCfgPPO,\
+    HumanoidBotElfFreeArmCfg, HumanoidBotElfFreeArmCfgPPO
 
 task_registry.register("pbrs:humanoid", Humanoid, HumanoidCfg(), HumanoidCfgPPO())
 
 task_registry.register("humanoid_botelf", HumanoidBotElf, HumanoidBotElfCfg(), HumanoidBotElfCfgPPO())
+task_registry.register("humanoid_botelf_free_arm", HumanoidBotElf, HumanoidBotElfFreeArmCfg(), HumanoidBotElfFreeArmCfgPPO())

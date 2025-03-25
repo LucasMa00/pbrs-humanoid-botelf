@@ -352,7 +352,16 @@
           rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
       </material>
     </visual>
-    <collision name="l_foot_1">
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/l_ankle_x_link.STL" />
+      </geometry>
+    </collision>
+    <!-- <collision name="l_foot_1">
       <origin rpy="0 1.5708 0" xyz="0.0 0.02 -0.02"/>
       <geometry>
           <cylinder length="0.16" radius="0.02"/>
@@ -363,7 +372,7 @@
       <geometry>
           <cylinder length="0.16" radius="0.02"/>
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="l_ankle_x_joint"
     type="revolute">
@@ -693,7 +702,16 @@
           rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
       </material>
     </visual>
-    <collision name="r_foot_1">
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/r_ankle_x_link.STL" />
+      </geometry>
+    </collision>
+    <!-- <collision name="r_foot_1">
       <origin rpy="0 1.5708 0" xyz="0.0 0.02 -0.02"/>
       <geometry>
           <cylinder length="0.16" radius="0.02"/>
@@ -704,7 +722,7 @@
       <geometry>
           <cylinder length="0.16" radius="0.02"/>
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="r_ankle_x_joint"
     type="revolute">
@@ -752,7 +770,7 @@
           rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -760,7 +778,7 @@
         <mesh
           filename="../meshes/l_shld_y_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="l_shld_y_joint"
     type="revolute">
@@ -864,7 +882,7 @@
           rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -872,7 +890,7 @@
         <mesh
           filename="../meshes/l_shld_z_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="l_shld_z_joint"
     type="revolute">
@@ -976,7 +994,7 @@
           rgba="1 1 1 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -984,7 +1002,7 @@
         <mesh
           filename="../meshes/r_shld_y_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="r_shld_y_joint"
     type="revolute">
@@ -1088,7 +1106,7 @@
           rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
       </material>
     </visual>
-    <collision>
+    <!-- <collision>
       <origin
         xyz="0 0 0"
         rpy="0 0 0" />
@@ -1096,7 +1114,7 @@
         <mesh
           filename="../meshes/r_shld_z_link.STL" />
       </geometry>
-    </collision>
+    </collision> -->
   </link>
   <joint name="r_shld_z_joint"
     type="revolute">

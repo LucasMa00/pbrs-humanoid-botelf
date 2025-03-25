@@ -182,7 +182,51 @@ class HumanoidBotElf(LeggedRobot):
         # error += self.sqrdexp(
         #     (self.dof_pos[:, 2] + self.dof_pos[:, 8])
         #     / self.cfg.normalization.obs_scales.dof_pos)
-        return error/4
+        return error/3
+
+    def _reward_leg_joint_regularization(self):
+        # Reward joint poses and symmetry
+        error = 0.
+        # Yaw joints regularization around 0
+        error += self.sqrdexp(
+            (self.dof_pos[:, 0]) / self.cfg.normalization.obs_scales.dof_pos)
+        error += self.sqrdexp(
+            (self.dof_pos[:, 10]) / self.cfg.normalization.obs_scales.dof_pos)
+        # Ab/ad joint symmetry
+        error += self.sqrdexp(
+            (self.dof_pos[:, 1] + self.dof_pos[:, 11])
+            / self.cfg.normalization.obs_scales.dof_pos)
+        # Pitch joint symmetry
+        # error += self.sqrdexp(
+        #     (self.dof_pos[:, 2] + self.dof_pos[:, 8])
+        #     / self.cfg.normalization.obs_scales.dof_pos)
+        return error/3
+    
+    def _reward_arm_joint_regularization(self):
+        # Reward joint poses and symmetry
+        error = 0.
+        # Yaw joints regularization around 0
+        error += self.sqrdexp(
+            (self.dof_pos[:, 8]) / self.cfg.normalization.obs_scales.dof_pos)
+        error += self.sqrdexp(
+            (self.dof_pos[:, 18]-0.2) / self.cfg.normalization.obs_scales.dof_pos)
+        # Ab/ad joint symmetry
+        # error += self.sqrdexp(
+        #     (self.dof_pos[:, 7] + self.dof_pos[:, 17])
+        #     / self.cfg.normalization.obs_scales.dof_pos)
+        error += self.sqrdexp(
+            (self.dof_pos[:, 7]-0.2) / self.cfg.normalization.obs_scales.dof_pos)
+        error += self.sqrdexp(
+            (self.dof_pos[:, 17]+0.2) / self.cfg.normalization.obs_scales.dof_pos)
+        
+        # Pitch joint symmetry
+        error += self.sqrdexp(
+            (self.dof_pos[:, 6] + self.dof_pos[:, 16])
+            / self.cfg.normalization.obs_scales.dof_pos)
+        # error += self.sqrdexp(
+        #     (self.dof_pos[:, 9] - self.dof_pos[:, 19])
+        #     / self.cfg.normalization.obs_scales.dof_pos)
+        return error/5
 
     # def _reward_ankle_regularization(self):
     #     # Ankle joint regularization around 0
@@ -198,7 +242,12 @@ class HumanoidBotElf(LeggedRobot):
     def pre_physics_step(self):
         self.rwd_oriPrev = self._reward_orientation()
         self.rwd_baseHeightPrev = self._reward_base_height()
-        self.rwd_jointRegPrev = self._reward_joint_regularization()
+        if hasattr(self.cfg.rewards.scales, 'jointReg_pb') and self.cfg.rewards.scales.jointReg_pb != 0:
+            self.rwd_jointRegPrev = self._reward_joint_regularization()
+        if hasattr(self.cfg.rewards.scales, 'leg_jointReg_pb') and self.cfg.rewards.scales.leg_jointReg_pb != 0:
+            self.rwd_leg_jointRegPrev = self._reward_leg_joint_regularization()
+        if hasattr(self.cfg.rewards.scales, 'arm_jointReg_pb') and self.cfg.rewards.scales.arm_jointReg_pb != 0:
+            self.rwd_arm_jointRegPrev = self._reward_arm_joint_regularization()
 
     def _reward_ori_pb(self):
         delta_phi = ~self.reset_buf \
@@ -222,6 +271,16 @@ class HumanoidBotElf(LeggedRobot):
         double_contact = torch.sum(1.*contacts, dim=1)==2
         correct_contact = torch.where(torch.norm(self.commands[:, :2], dim=1) > 0.1, single_contact, double_contact)
         return correct_contact.float()
+
+    def _reward_leg_jointReg_pb(self):
+        delta_phi = ~self.reset_buf \
+            * (self._reward_leg_joint_regularization() - self.rwd_leg_jointRegPrev)
+        return delta_phi / self.dt_step
+    
+    def _reward_arm_jointReg_pb(self):
+        delta_phi = ~self.reset_buf \
+            * (self._reward_arm_joint_regularization() - self.rwd_arm_jointRegPrev)
+        return delta_phi / self.dt_step
 
 # ##################### HELPER FUNCTIONS ################################## #
 
