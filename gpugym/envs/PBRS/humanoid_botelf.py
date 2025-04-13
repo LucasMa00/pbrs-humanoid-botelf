@@ -215,9 +215,9 @@ class HumanoidBotElf(LeggedRobot):
         #     (self.dof_pos[:, 7] + self.dof_pos[:, 17])
         #     / self.cfg.normalization.obs_scales.dof_pos)
         error += self.sqrdexp(
-            (self.dof_pos[:, 7]-0.2) / self.cfg.normalization.obs_scales.dof_pos)
+            (self.dof_pos[:, 7]-0.1) / self.cfg.normalization.obs_scales.dof_pos)
         error += self.sqrdexp(
-            (self.dof_pos[:, 17]+0.2) / self.cfg.normalization.obs_scales.dof_pos)
+            (self.dof_pos[:, 17]+0.1) / self.cfg.normalization.obs_scales.dof_pos)
         
         # Pitch joint symmetry
         error += self.sqrdexp(
